@@ -1,0 +1,17 @@
+{
+  "id": "olist", "name": "Olist E-Commerce", "database": "arthiq_olist",
+  "role": "arthiq_olist_analytics", "namespace": "olist", "currency": "BRL",
+  "money_columns": {"order_items":["price","freight_value"],"order_payments":["payment_value"]},
+  "aliases":{"products":["category","categories","product"],"order_items":["item","line item"],"orders":["order","purchase","delivered","delayed","delivery","monthly"],"customers":["customer","buyer","customer state"],"order_payments":["payment method","payments"],"sellers":["seller"],"geolocation":["geolocation"],"product_category_name_translation":["English category"]},
+  "metrics":[
+    {"name":"merchandise value","aliases":["revenue","spending","sales value"],"definition":"Sum order_items.price once per item line in BRL. Exclude freight and payments. Apply delivered status only when requested.","requirements":{"order_items":["price"]}},
+    {"name":"delivered merchandise value","aliases":["delivered revenue"],"definition":"Join order_items to orders on order_id and filter order_status = 'delivered'. Sum price once per line.","requirements":{"orders":["order_status","order_id"],"order_items":["order_id","price"]}},
+    {"name":"customer","aliases":["distinct customers","repeat customers"],"definition":"customer_id is an order-specific record. Count distinct customer_unique_id for people. For repeats group orders by customer_unique_id.","requirements":{"customers":["customer_id","customer_unique_id"]}},
+    {"name":"freight","aliases":["shipping charge"],"definition":"Use item-level freight_value for freight in BRL.","requirements":{"order_items":["freight_value"]}},
+    {"name":"payment","aliases":["payment method"],"definition":"Analyze payment_type and payment_value at payment grain. Never sum payments after joining to item lines.","requirements":{"order_payments":["payment_type","payment_value"]}},
+    {"name":"purchase date","aliases":["monthly","year","purchase time"],"definition":"Use order_purchase_timestamp for order placement. Approval, carrier handoff, customer delivery and estimated delivery are separate dates.","requirements":{"orders":["order_purchase_timestamp"]}},
+    {"name":"delayed deliveries","aliases":["late deliveries"],"definition":"Compare order_delivered_customer_date to order_estimated_delivery_date for delivered orders.","requirements":{"orders":["order_delivered_customer_date","order_estimated_delivery_date","order_status"]}},
+    {"name":"geolocation","aliases":["zip prefix"],"definition":"ZIP prefixes repeat. Never join geolocation directly to aggregate counts or amounts.","requirements":{"geolocation":["geolocation_zip_code_prefix"]}},
+    {"name":"English category","aliases":["English category names"],"definition":"Use a left join on product_category_name to retain untranslated categories. Ask for clarification if this lookup is unavailable.","requirements":{"products":["product_category_name"],"product_category_name_translation":["product_category_name","product_category_name_english"]}}
+  ]
+}

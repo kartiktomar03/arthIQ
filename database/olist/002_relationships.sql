@@ -1,0 +1,15 @@
+ALTER TABLE olist.orders ADD FOREIGN KEY(customer_id) REFERENCES olist.customers;
+ALTER TABLE olist.order_items ADD FOREIGN KEY(order_id) REFERENCES olist.orders;
+ALTER TABLE olist.order_items ADD FOREIGN KEY(product_id) REFERENCES olist.products;
+ALTER TABLE olist.order_items ADD FOREIGN KEY(seller_id) REFERENCES olist.sellers;
+ALTER TABLE olist.order_payments ADD FOREIGN KEY(order_id) REFERENCES olist.orders;
+ALTER TABLE olist.order_reviews ADD FOREIGN KEY(order_id) REFERENCES olist.orders;
+CREATE INDEX orders_customer ON olist.orders(customer_id);
+CREATE INDEX orders_status_purchase ON olist.orders(order_status,order_purchase_timestamp);
+CREATE INDEX orders_purchase ON olist.orders(order_purchase_timestamp);
+CREATE INDEX items_product ON olist.order_items(product_id);
+CREATE INDEX items_seller ON olist.order_items(seller_id);
+CREATE INDEX reviews_order ON olist.order_reviews(order_id);
+CREATE INDEX customers_unique ON olist.customers(customer_unique_id);
+CREATE INDEX products_category ON olist.products(product_category_name);
+CREATE INDEX geolocation_zip ON olist.geolocation(geolocation_zip_code_prefix);

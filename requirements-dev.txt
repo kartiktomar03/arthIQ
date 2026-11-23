@@ -1,0 +1,4 @@
+-r requirements-rag.txt
+httpx>=0.28,<1
+pytest>=8,<10
+psutil>=7,<8

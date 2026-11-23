@@ -1,0 +1,275 @@
+{
+    "mode": "first import",
+    "orders": {
+        "nulls": {
+            "order_id": 0,
+            "customer_id": 0,
+            "order_status": 0,
+            "order_approved_at": 160,
+            "order_purchase_timestamp": 0,
+            "order_delivered_carrier_date": 1783,
+            "order_delivered_customer_date": 2965,
+            "order_estimated_delivery_date": 0
+        },
+        "pg_rows": 99441,
+        "csv_rows": 99441,
+        "duplicate_key_excess": {
+            "order_id": 0
+        },
+        "csv_identical_row_excess": 0,
+        "identical_typed_row_excess": 0
+    },
+    "indexes": [
+        "CREATE UNIQUE INDEX customers_pkey ON olist.customers USING btree (customer_id)",
+        "CREATE INDEX customers_unique ON olist.customers USING btree (customer_unique_id)",
+        "CREATE INDEX geolocation_zip ON olist.geolocation USING btree (geolocation_zip_code_prefix)",
+        "CREATE INDEX items_product ON olist.order_items USING btree (product_id)",
+        "CREATE INDEX items_seller ON olist.order_items USING btree (seller_id)",
+        "CREATE UNIQUE INDEX order_items_pkey ON olist.order_items USING btree (order_id, order_item_id)",
+        "CREATE UNIQUE INDEX order_payments_pkey ON olist.order_payments USING btree (order_id, payment_sequential)",
+        "CREATE UNIQUE INDEX order_reviews_pkey ON olist.order_reviews USING btree (review_id, order_id)",
+        "CREATE INDEX orders_customer ON olist.orders USING btree (customer_id)",
+        "CREATE UNIQUE INDEX orders_pkey ON olist.orders USING btree (order_id)",
+        "CREATE INDEX orders_purchase ON olist.orders USING btree (order_purchase_timestamp)",
+        "CREATE INDEX orders_status_purchase ON olist.orders USING btree (order_status, order_purchase_timestamp)",
+        "CREATE UNIQUE INDEX product_category_name_translation_pkey ON olist.product_category_name_translation USING btree (product_category_name)",
+        "CREATE INDEX products_category ON olist.products USING btree (product_category_name)",
+        "CREATE UNIQUE INDEX products_pkey ON olist.products USING btree (product_id)",
+        "CREATE INDEX reviews_order ON olist.order_reviews USING btree (order_id)",
+        "CREATE UNIQUE INDEX sellers_pkey ON olist.sellers USING btree (seller_id)"
+    ],
+    "sellers": {
+        "nulls": {
+            "seller_id": 0,
+            "seller_city": 0,
+            "seller_state": 0,
+            "seller_zip_code_prefix": 0
+        },
+        "pg_rows": 3095,
+        "csv_rows": 3095,
+        "duplicate_key_excess": {
+            "seller_id": 0
+        },
+        "csv_identical_row_excess": 0,
+        "identical_typed_row_excess": 0
+    },
+    "database": "arthiq_olist",
+    "products": {
+        "nulls": {
+            "product_id": 0,
+            "product_weight_g": 2,
+            "product_width_cm": 2,
+            "product_height_cm": 2,
+            "product_length_cm": 2,
+            "product_photos_qty": 610,
+            "product_name_lenght": 610,
+            "product_category_name": 610,
+            "product_description_lenght": 610
+        },
+        "pg_rows": 32951,
+        "csv_rows": 32951,
+        "duplicate_key_excess": {
+            "product_id": 0
+        },
+        "csv_identical_row_excess": 0,
+        "identical_typed_row_excess": 0
+    },
+    "customers": {
+        "nulls": {
+            "customer_id": 0,
+            "customer_city": 0,
+            "customer_state": 0,
+            "customer_unique_id": 0,
+            "customer_zip_code_prefix": 0
+        },
+        "pg_rows": 99441,
+        "csv_rows": 99441,
+        "duplicate_key_excess": {
+            "customer_id": 0,
+            "customer_unique_id": 3345
+        },
+        "csv_identical_row_excess": 0,
+        "identical_typed_row_excess": 0
+    },
+    "constraints": [
+        {
+            "name": "customers_pkey",
+            "table": "olist.customers",
+            "definition": "PRIMARY KEY (customer_id)"
+        },
+        {
+            "name": "order_items_order_id_fkey",
+            "table": "olist.order_items",
+            "definition": "FOREIGN KEY (order_id) REFERENCES olist.orders(order_id)"
+        },
+        {
+            "name": "order_items_pkey",
+            "table": "olist.order_items",
+            "definition": "PRIMARY KEY (order_id, order_item_id)"
+        },
+        {
+            "name": "order_items_product_id_fkey",
+            "table": "olist.order_items",
+            "definition": "FOREIGN KEY (product_id) REFERENCES olist.products(product_id)"
+        },
+        {
+            "name": "order_items_seller_id_fkey",
+            "table": "olist.order_items",
+            "definition": "FOREIGN KEY (seller_id) REFERENCES olist.sellers(seller_id)"
+        },
+        {
+            "name": "order_payments_order_id_fkey",
+            "table": "olist.order_payments",
+            "definition": "FOREIGN KEY (order_id) REFERENCES olist.orders(order_id)"
+        },
+        {
+            "name": "order_payments_pkey",
+            "table": "olist.order_payments",
+            "definition": "PRIMARY KEY (order_id, payment_sequential)"
+        },
+        {
+            "name": "order_reviews_order_id_fkey",
+            "table": "olist.order_reviews",
+            "definition": "FOREIGN KEY (order_id) REFERENCES olist.orders(order_id)"
+        },
+        {
+            "name": "order_reviews_pkey",
+            "table": "olist.order_reviews",
+            "definition": "PRIMARY KEY (review_id, order_id)"
+        },
+        {
+            "name": "orders_customer_id_fkey",
+            "table": "olist.orders",
+            "definition": "FOREIGN KEY (customer_id) REFERENCES olist.customers(customer_id)"
+        },
+        {
+            "name": "orders_pkey",
+            "table": "olist.orders",
+            "definition": "PRIMARY KEY (order_id)"
+        },
+        {
+            "name": "product_category_name_translation_pkey",
+            "table": "olist.product_category_name_translation",
+            "definition": "PRIMARY KEY (product_category_name)"
+        },
+        {
+            "name": "products_pkey",
+            "table": "olist.products",
+            "definition": "PRIMARY KEY (product_id)"
+        },
+        {
+            "name": "sellers_pkey",
+            "table": "olist.sellers",
+            "definition": "PRIMARY KEY (seller_id)"
+        }
+    ],
+    "geolocation": {
+        "nulls": {
+            "geolocation_lat": 0,
+            "geolocation_lng": 0,
+            "geolocation_city": 0,
+            "geolocation_state": 0,
+            "geolocation_zip_code_prefix": 0
+        },
+        "pg_rows": 1000163,
+        "csv_rows": 1000163,
+        "duplicate_key_excess": {
+            "geolocation_zip_code_prefix": 981148
+        },
+        "csv_identical_row_excess": 261831,
+        "identical_typed_row_excess": 261831
+    },
+    "order_items": {
+        "nulls": {
+            "price": 0,
+            "order_id": 0,
+            "seller_id": 0,
+            "product_id": 0,
+            "freight_value": 0,
+            "order_item_id": 0,
+            "shipping_limit_date": 0
+        },
+        "pg_rows": 112650,
+        "csv_rows": 112650,
+        "duplicate_key_excess": {
+            "order_id": 13984,
+            "order_id,order_item_id": 0
+        },
+        "csv_identical_row_excess": 0,
+        "identical_typed_row_excess": 0
+    },
+    "orphan_rows": {
+        "order_items.order_id -> orders.order_id": 0,
+        "order_reviews.order_id -> orders.order_id": 0,
+        "order_items.seller_id -> sellers.seller_id": 0,
+        "order_payments.order_id -> orders.order_id": 0,
+        "orders.customer_id -> customers.customer_id": 0,
+        "order_items.product_id -> products.product_id": 0,
+        "sellers.seller_zip_code_prefix -> geolocation.geolocation_zip_code_prefix": 7,
+        "customers.customer_zip_code_prefix -> geolocation.geolocation_zip_code_prefix": 278,
+        "products.product_category_name -> product_category_name_translation.product_category_name": 13
+    },
+    "reader_role": "arthiq_olist_analytics",
+    "skipped_rows": 0,
+    "order_reviews": {
+        "nulls": {
+            "order_id": 0,
+            "review_id": 0,
+            "review_score": 0,
+            "review_comment_title": 87656,
+            "review_creation_date": 0,
+            "review_comment_message": 58247,
+            "review_answer_timestamp": 0
+        },
+        "pg_rows": 99224,
+        "csv_rows": 99224,
+        "duplicate_key_excess": {
+            "order_id": 551,
+            "review_id": 814,
+            "review_id,order_id": 0
+        },
+        "csv_identical_row_excess": 0,
+        "identical_typed_row_excess": 0
+    },
+    "reference_sql": {
+        "orders": 99441,
+        "order_items": 112650,
+        "unique_sellers": 3095,
+        "delivered_orders": 96478,
+        "distinct_customers": 96096,
+        "delivered_item_price_brl": "13221498.11"
+    },
+    "rejected_rows": 0,
+    "order_payments": {
+        "nulls": {
+            "order_id": 0,
+            "payment_type": 0,
+            "payment_value": 0,
+            "payment_sequential": 0,
+            "payment_installments": 0
+        },
+        "pg_rows": 103886,
+        "csv_rows": 103886,
+        "duplicate_key_excess": {
+            "order_id": 4446,
+            "order_id,payment_sequential": 0
+        },
+        "csv_identical_row_excess": 0,
+        "identical_typed_row_excess": 0
+    },
+    "elapsed_seconds": 42.094269,
+    "reader_privileges_verified": true,
+    "product_category_name_translation": {
+        "nulls": {
+            "product_category_name": 0,
+            "product_category_name_english": 0
+        },
+        "pg_rows": 71,
+        "csv_rows": 71,
+        "duplicate_key_excess": {
+            "product_category_name": 0
+        },
+        "csv_identical_row_excess": 0,
+        "identical_typed_row_excess": 0
+    }
+}
